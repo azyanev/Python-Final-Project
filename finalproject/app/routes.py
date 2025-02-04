@@ -31,6 +31,13 @@ def index():
     return render_template("index.html", title='Home Page', form=form, posts=posts)
 
 
+@app.route('/explore')
+@login_required
+def explore():
+    query = sa.select(Post).order_by(Post.timestamp.desc())
+    posts = db.session.scalars(query).all()
+    return render_template('index.html', title='Explore', posts=posts)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
