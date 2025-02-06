@@ -1,50 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Edit Post</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        
-        <p>
-            {{ form.goal.label }}<br>
-            {{ form.goal(size=60) }}<br>
-            {% for error in form.goal.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
+    <div class="container mt-4">
+        <h1>Edit Post</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                <label for="goal" class="form-label">{{ form.goal.label }}</label>
+                {{ form.goal(class="form-control", id="goal") }}
+                {% for error in form.goal.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
 
-        <p>
-            {{ form.starttime.label }}<br>
-            {{ form.starttime() }}<br>
-            {% for error in form.starttime.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
+            <div class="mb-3">
+                <label for="starttime" class="form-label">{{ form.starttime.label }}</label>
+                {{ form.starttime(class="form-control", id="starttime") }}
+                {% for error in form.starttime.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
 
-        <p>
-            {{ form.endtime.label }}<br>
-            {{ form.endtime() }}<br>
-            {% for error in form.endtime.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
+            <div class="mb-3">
+                <label for="endtime" class="form-label">{{ form.endtime.label }}</label>
+                {{ form.endtime(class="form-control", id="endtime") }}
+                {% for error in form.endtime.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
 
-        <p>
-            {{ form.isfinished.label }}<br>
-            {{ form.isfinished() }}<br>
-            {% for error in form.isfinished.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
+            <div class="mb-3">
+                <label for="isfinished" class="form-label">{{ form.isfinished.label }}</label>
+                {{ form.isfinished(class="form-check-input", id="isfinished") }}
+                {% for error in form.isfinished.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
 
-        <p>
-            {{ form.body.label }}<br>
-            {{ form.body(cols=50, rows=4) }}<br>
-            {% for error in form.body.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
+            <div class="mb-3">
+                <label for="body" class="form-label">{{ form.body.label }}</label>
+                {{ form.body(class="form-control", id="body", rows=4) }}
+                {% for error in form.body.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
 
-        <p>{{ form.submit() }}</p>
-    </form>
+            <div class="d-flex justify-content-end">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
 {% endblock %}
