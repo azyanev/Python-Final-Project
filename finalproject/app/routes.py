@@ -91,7 +91,12 @@ def user(username):
     user = db.first_or_404(sa.select(User).where(User.username == username))
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        post = Post(goal=form.goal.data,
+                    body=form.post.data,
+                    starttime=form.starttime.data,
+                    endtime=form.endtime.data,
+                    isfinished=form.isfinished.data,
+                    author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
