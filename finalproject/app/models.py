@@ -89,10 +89,14 @@ def load_user(id):
 
 class Post(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    body: so.Mapped[str] = so.mapped_column(sa.String(140))
+    goal: so.Mapped[str] = so.mapped_column(sa.String(60))
+    body: so.Mapped[str] = so.mapped_column(sa.String(300))
     timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    starttime: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+    endtime: so.Mapped[datetime] = so.mapped_column(default=None)
+    isfinished: so.Mapped[bool] = so.mapped_column(sa.Boolean(), default=False)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
     author: so.Mapped[User] = so.relationship(back_populates='posts')
-
+    
     def __repr__(self):
         return f"<Post {self.body}"
