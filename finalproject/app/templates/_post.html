@@ -11,7 +11,40 @@
             </a>
             said {{ moment(post.timestamp).fromNow() }}:
             <br>
-            {{ post.body }}
+            <strong>Goal:</strong> {{ post.goal }}<br>
+
+            <strong>Start Time:</strong> 
+            <input type="text" id="starttime-{{ post.id }}" class="datetime-picker" 
+                   value="{{ post.starttime.strftime('%Y-%m-%d') if post.starttime else '' }}" />
+            <br>
+
+            <strong>End Time:</strong> 
+            <input type="text" id="endtime-{{ post.id }}" class="datetime-picker" 
+                   value="{{ post.endtime.strftime('%Y-%m-%d') if post.endtime else '' }}" />
+            <br>
+
+            <strong>Status:</strong> 
+            {% if post.isfinished %}
+                ✅ Finished
+            {% else %}
+                ⏳ In Progress
+            {% endif %}
+            <br>
+
+            <strong>Details:</strong> {{ post.body }}
         </td>
     </tr>
 </table>
+
+<!-- Include Flatpickr for Date-Time Picker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr(".datetime-picker", {
+            enableTime: true,
+            dateFormat: "Y-m-d",
+            time_24hr: true
+        });
+    });
+</script>
