@@ -32,6 +32,11 @@
             <br>
 
             <strong>Details:</strong> {{ post.body }}
+            <br>
+            
+            {% if post.author == current_user %}
+                    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>
+            {% endif %}
         </td>
     </tr>
 </table>

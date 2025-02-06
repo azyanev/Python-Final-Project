@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Edit Post</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        
+        <p>
+            {{ form.goal.label }}<br>
+            {{ form.goal(size=60) }}<br>
+            {% for error in form.goal.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.starttime.label }}<br>
+            {{ form.starttime() }}<br>
+            {% for error in form.starttime.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.endtime.label }}<br>
+            {{ form.endtime() }}<br>
+            {% for error in form.endtime.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.isfinished.label }}<br>
+            {{ form.isfinished() }}<br>
+            {% for error in form.isfinished.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.body.label }}<br>
+            {{ form.body(cols=50, rows=4) }}<br>
+            {% for error in form.body.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

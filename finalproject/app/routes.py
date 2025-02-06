@@ -4,8 +4,8 @@ from urllib.parse import urlsplit
 from datetime import datetime, timezone
 from app import app, db
 import sqlalchemy as sa
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, EmptyForm, PostForm
-from app.models import User, Post
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, EmptyForm, PostForm, EditPostForm
+from app.models import User, Post   
 
 
 
@@ -127,6 +127,31 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
+
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(post_id):
+    post = db.get_or_404(Post, post_id)
+    if post.author != current_user:
+        flash("You don't have permission to edit this post.")
+        return redirect(url_for('index'))
+    form = EditPostForm(post_id=post.id)
+    if form.validate_on_submit():
+        post.goal = form.goal.data
+        post.body = form.body.data
+        post.starttime = form.starttime.data
+        post.endtime = form.endtime.data
+        post.isfinished = form.isfinished.data
+        db.session.commit()
+        flash('Your post has been updated.')
+        return redirect(url_for('user', username=current_user.username))
+    elif request.method == 'GET':
+        form.goal.data = post.goal
+        form.body.data = post.body
+        form.starttime.data = post.starttime
+        form.endtime.data = post.endtime
+        form.isfinished.data = post.isfinished
+    return render_template('edit_post.html', title='Edit Post', form=form, post=post)
 
 @app.route('/follow/<username>', methods=['POST'])
 @login_required

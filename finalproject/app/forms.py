@@ -58,3 +58,16 @@ class PostForm(FlaskForm):
     isfinished = BooleanField('Finished')
     post = TextAreaField('Details', validators=[DataRequired(), Length(min=1, max=300)])
     submit = SubmitField('Submit')
+
+
+class EditPostForm(FlaskForm):
+    goal = StringField('Goal', validators=[DataRequired(), Length(max=60)])
+    starttime = DateField('Start Time', format='%Y-%m-%d', validators=[Optional()])
+    endtime = DateField('End Time', format='%Y-%m-%d', validators=[Optional()])
+    isfinished = BooleanField('Finished')
+    body = TextAreaField('Details', validators=[DataRequired(), Length(min=1, max=300)])
+    submit = SubmitField('Submit')
+
+    def __init__(self, post_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.post_id = post_id
