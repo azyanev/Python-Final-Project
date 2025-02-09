@@ -1,47 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Calendar for {{ month }} / {{ year }}</h1>
-    <div>
-        <a href="{{ url_for('calendar_view', month=month-1 if month > 1 else 12, year=year if month > 1 else year-1) }}">Previous</a>
-        <a href="{{ url_for('calendar_view', month=month+1 if month < 12 else 1, year=year if month < 12 else year+1) }}">Next</a>
-    </div>
+    <div class="container mt-4">
+        <h1 class="text-center">📅 Calendar for {{ month }} / {{ year }}</h1>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Sun</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for week in calendar %}
-                <tr>
-                    {% for day in week %}
-                        <td>
-                            {% if day != 0 %}
-                                <div>
-                                    <strong>{{ day }}</strong>
-                                    {% if day in post_dates %}
-                                        <ul>
-                                            {% for post in post_dates[day] %}
-                                                <li>
-                                                    <a href="{{ url_for('edit_post', post_id=post.id) }}">{{ post.goal }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
+        <!-- Navigation buttons -->
+        <div class="d-flex justify-content-between my-3">
+            <a href="{{ url_for('calendar_view', month=month-1 if month > 1 else 12, year=year if month > 1 else year-1) }}" 
+               class="btn btn-outline-primary">&larr; Previous Month</a>
+            <a href="{{ url_for('calendar_view', month=month+1 if month < 12 else 1, year=year if month < 12 else year+1) }}" 
+               class="btn btn-outline-primary">Next Month &rarr;</a>
+        </div>
+
+        <!-- Calendar Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="bg-secondary text-white">Sun</th>
+                        <th class="bg-secondary text-white">Mon</th>
+                        <th class="bg-secondary text-white">Tue</th>
+                        <th class="bg-secondary text-white">Wed</th>
+                        <th class="bg-secondary text-white">Thu</th>
+                        <th class="bg-secondary text-white">Fri</th>
+                        <th class="bg-secondary text-white">Sat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for week in calendar %}
+                        <tr>
+                            {% for day in week %}
+                                <td class="p-3 
+                                    {% if day == 0 %} bg-light 
+                                    {% elif day in post_dates %} bg-primary text-white {% else %} {% endif %}">
+                                    
+                                    {% if day != 0 %}
+                                        <strong>{{ day }}</strong>
+
+                                        {% if day in post_dates %}
+                                            <ul class="list-unstyled mt-2">
+                                                {% for post in post_dates[day] %}
+                                                    <li>
+                                                        <a href="{{ url_for('edit_post', post_id=post.id) }}" 
+                                                           class="badge badge-light">
+                                                            {{ post.goal }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
                                     {% endif %}
-                                </div>
-                            {% endif %}
-                        </td>
+                                </td>
+                            {% endfor %}
+                        </tr>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
