@@ -6,6 +6,8 @@ from app import app, db
 import sqlalchemy as sa
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, EmptyForm, PostForm, EditPostForm
 from app.models import User, Post   
+import calendar
+from sqlalchemy import extract
 
 
 
@@ -22,7 +24,7 @@ def before_request():
 def index():
     page = request.args.get('page', 1, type=int)
     posts = db.paginate(current_user.following_posts(), page=page,
-                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)  
     next_url = url_for('index', page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('index', page=posts.prev_num) \
@@ -193,3 +195,34 @@ def unfollow(username):
         return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
+    
+
+@app.route('/calendar')
+@login_required
+def calendar_view():
+    today = datetime.today()
+    month = request.args.get('month', today.month, type=int)
+    year = request.args.get('year', today.year, type=int)
+    cal = calendar.monthcalendar(year, month)
+    posts = Post.query.filter(
+        extract('month', Post.starttime) == month,
+        extract('year', Post.starttime) == year,
+        Post.user_id == current_user.id
+    ).all()
+    post_dates = {}
+    for post in posts:
+        start_day = post.starttime.day
+        end_day = post.endtime.day if post.endtime else start_day
+
+        if start_day not in post_dates:
+            post_dates[start_day] = []
+        post_dates[start_day].append(post)
+
+        if end_day != start_day:
+            if end_day not in post_dates:
+                post_dates[end_day] = []
+            post_dates[end_day].append(post)
+
+    return render_template('calendar.html', year=year, month=month, 
+                           calendar=cal, post_dates=post_dates)
+
